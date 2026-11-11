@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>智能手机电量优化 · 设置演示</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../src/styles/battery-tweaks.css">
+    <style>
+        body { max-width: 1100px; margin: auto; padding: 24px; background: #181d23; color: #edf1f5; font: 16px/1.6 system-ui, sans-serif; }
+        .demo-columns { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
+        .settingsHeader { font-weight: bold; color: #e5bd6b; }
+        button { cursor: pointer; }
+        .demo-controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+        .demo-controls button { padding: 10px; }
+        #phone-content { background: #252c35; border: 1px solid #687580; border-radius: 16px; padding: 12px; }
+        #phone-content h2 { font-size: 20px; }
+        .demo-note { color: #bdc8d3; }
+        @media (max-width: 760px) { .demo-columns { grid-template-columns: minmax(0, 1fr); } body { padding: 12px; } }
+        body.light { background: #f6f7f8; color: #202b34; }
+        body.light #phone-content { background: #fff; }
+        body.light .demo-note { color: #465360; }
+    </style>
+</head>
+<body>
+    <h1>智能手机电量优化</h1>
+    <p class="demo-note">独立设置演示 · 不是实际游戏 · 不包含游戏代码或素材</p>
+    <div class="demo-controls">
+        <button type="button" id="demo-phone">模拟手机操作</button>
+        <button type="button" id="demo-photo">模拟拍照</button>
+        <button type="button" id="demo-time">推进 10 游戏分钟</button>
+        <button type="button" id="demo-empty">模拟没电</button>
+        <button type="button" id="demo-theme">切换明暗主题</button>
+    </div>
+    <p id="demo-result" role="status">演示手机：初始 750 / 1000 点电量。</p>
+    <main class="demo-columns">
+        <div class="settingsGrid"><div class="settingsHeader options">万能的智能手机模组设置</div></div>
+        <div id="phone-content"><h2>系统设置</h2><p>这里展示手机内部设置入口。</p></div>
+    </main>
+    <script>
+        // Minimal independently authored API fixture; no upstream game code.
+        window.V = { Phone: { Using: 'demo', Owned: [{ id: 'demo', model: '演示手机', usable: true, newness: 750, newnessmax: 1000 }] } };
+        window.smartphone = {
+            自然电量损失每分钟: 0.3, 拍照电量消耗: 30, 充电速度每小时: 500, 充电损害每度电比: 0.01,
+            getUsingPhone() { return V.Phone.Owned.find(phone => phone.id === V.Phone.Using) || null; },
+            PhoneConsumption(cost) {
+                const phone = this.getUsingPhone();
+                if (!phone || phone.newness <= 0) return false;
+                phone.newness = Math.max(0, phone.newness - cost);
+                if (phone.newness === 0) { phone.newnessmax = Math.max(0, phone.newnessmax - 50); V.Phone.Using = 'null'; return false; }
+                return true;
+            },
+            PhonePowerPass(minutes) { return this.PhoneConsumption(minutes * this.自然电量损失每分钟); },
+            togglePhone() { return this.PhoneConsumption(1); },
+            toggleApp() { return this.PhoneConsumption(0.2); }
+        };
+    </script>
+    <script src="../src/scripts/battery-tweaks.js"></script>
+    <script>
+        function report(text) { document.getElementById('demo-result').textContent = text; }
+        document.getElementById('demo-phone').onclick = () => report(smartphone.togglePhone() ? '手机操作成功。' : '手机没电，操作失败。');
+        document.getElementById('demo-photo').onclick = () => report(smartphone.PhoneConsumption(smartphone.拍照电量消耗) ? '已模拟拍照扣电。' : '手机没电或刚刚耗尽。');
+        document.getElementById('demo-time').onclick = () => { smartphone.PhonePowerPass(10); report('已推进 10 游戏分钟。'); };
+        document.getElementById('demo-empty').onclick = () => { V.Phone.Owned[0].newness = 0; V.Phone.Using = 'null'; smartphone.PhoneConsumption(0); report('当前没电，设置仍可操作。'); };
+        document.getElementById('demo-theme').onclick = () => document.body.classList.toggle('light');
+    </script>
+    <script src="smoke-tests.js"></script>
+</body>
+</html>

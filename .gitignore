@@ -1,0 +1,9 @@
+node_modules/
+__pycache__/
+*.pyc
+*.mod.zip
+dist/
+.env
+.env.*
+*.log
+preview.local.html

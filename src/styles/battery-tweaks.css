@@ -1,0 +1,40 @@
+.spbt-panel {
+    box-sizing: border-box;
+    grid-column: 1 / -1;
+    min-width: 0;
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid #687580;
+    border-radius: 8px;
+    color: inherit;
+    background: rgba(127, 127, 127, 0.07);
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: left;
+}
+.spbt-panel .spbt-heading { margin: 0 0 0.3em; color: inherit; }
+.spbt-panel p { margin: 0.5em 0; }
+.spbt-panel .spbt-intro,
+.spbt-panel .spbt-hint { font-size: 0.85em; opacity: 0.85; }
+.spbt-panel .spbt-battery { padding: 0.6em; border: 1px solid #687580; border-radius: 5px; }
+.spbt-panel meter { display: block; width: 100%; height: 1.1em; margin-top: 0.3em; }
+.spbt-panel meter[hidden] { display: none; }
+.spbt-panel .spbt-fields { min-width: 0; margin: 0.7em 0; padding: 0.7em; border: 1px solid #687580; }
+.spbt-panel .spbt-fields:disabled { opacity: 0.55; }
+.spbt-panel .spbt-toggle { display: flex; align-items: flex-start; gap: 0.5em; margin: 0.7em 0; cursor: pointer; }
+.spbt-panel input[type="checkbox"] { flex: 0 0 auto; width: 1.1em; height: 1.1em; margin-top: 0.2em; }
+.spbt-panel .spbt-number-row { display: grid; grid-template-columns: minmax(0, 1fr) 8em; gap: 0.3em 0.7em; margin: 0.8em 0; align-items: center; }
+.spbt-panel input[type="number"] { box-sizing: border-box; width: 100%; min-width: 0; padding: 0.4em; color: inherit; background: transparent; border: 1px solid #687580; border-radius: 4px; font: inherit; }
+.spbt-panel .spbt-hint { grid-column: 1 / -1; }
+.spbt-panel .spbt-actions { display: flex; gap: 0.5em; flex-wrap: wrap; }
+.spbt-panel button { margin: 0; padding: 0.5em 0.7em; min-height: 2.5em; border: 1px solid #687580; border-radius: 5px; color: inherit; background: rgba(127, 127, 127, 0.12); cursor: pointer; font: inherit; }
+.spbt-panel .spbt-primary { background: #245d48; color: #fff; border-color: #378563; }
+.spbt-panel :is(button, input):focus-visible { outline: 2px solid #50a8d8; outline-offset: 2px; }
+.spbt-panel .spbt-feedback { font-size: 0.9em; }
+.spbt-panel .spbt-warning { padding-top: 0.7em; border-top: 1px solid #687580; font-size: 0.85em; }
+#phone-content .spbt-panel { font-size: 14px; padding: 0.7em; }
+#phone-content .spbt-number-row { grid-template-columns: minmax(0, 1fr) 6em; }
+@media (max-width: 420px) {
+    .spbt-panel .spbt-number-row { grid-template-columns: minmax(0, 1fr); }
+    .spbt-panel .spbt-actions button { flex: 1 1 auto; }
+}
